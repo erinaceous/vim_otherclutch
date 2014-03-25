@@ -7,7 +7,7 @@
 " == id(s) of pedal(s). Proper solution is a udev rule file.
 "
 " Owain Jones [github.com/doomcat]
-:" Thanks to these people/articles:
+" Thanks to these people/articles:
 " http://brainacle.com/how-to-write-vim-plugins-with-python.html
 " https://pythonhosted.org/evdev/tutorial.html
 "
