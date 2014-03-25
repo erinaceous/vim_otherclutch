@@ -12,6 +12,7 @@ import argparse
 import asyncore
 import atexit
 import evdev
+import time
 import os
 
 
@@ -80,10 +81,13 @@ if __name__ == '__main__':
     state = args.state
     state_write(state, '0')
     pedals = list(get_pedals(name))
-    dispatchers = list()
+    dispatchers = dict()
     atexit.register(exit_handler, state)
-    for pedal in pedals:
-        #print('Grabbing pedal', pedal.name)
-        pedal.grab()
-        dispatchers.append(PedalDispatcher(pedal, state))
-    asyncore.loop()
+    while True:
+        for pedal in pedals:
+            #print('Grabbing pedal', pedal.name)
+            pedal.grab()
+            if pedal not in dispatchers:
+                dispatchers[pedal] = PedalDispatcher(pedal, state)
+        asyncore.loop()
+        time.sleep(2)

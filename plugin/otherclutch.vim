@@ -35,6 +35,7 @@ endif
 if !exists('g:clutch_state')
     let g:clutch_state='/tmp/clutch_state'
 endif
+let s:plugindir = expand('<sfile>:p:h:h')
 
 
 function! otherclutch#init()
@@ -58,8 +59,9 @@ last_state = '0'
 def check_clutch(name, statefile):
     if os.path.exists(statefile) is False:
         try:
+            global plugindir
             proc = subprocess.Popen([
-                './otherclutch.py',
+                os.path.join(plugindir, 'plugin', 'otherclutch.py'),
                 '--state', statefile,
                 '--clutch_name', name
             ])
@@ -67,7 +69,7 @@ def check_clutch(name, statefile):
             return '0'
     try:
         state = open(statefile, 'r').read()
-    except os.FileNotFoundError:
+    except:
         state = '0'
     return state
 
@@ -89,9 +91,11 @@ CLUTCH_STATE = '/tmp/clutch_state'
 if vim_mode:
     name = vim.eval('g:clutch_name')
     statefile = vim.eval('g:clutch_state')
+    plugindir = vim.eval('s:plugindir')
 else:
     name = CLUTCH_NAME
     statefile = '/tmp/clutch_state'
+    plugindir = os.getcwd()
 state = check_clutch(name, statefile)
 last_state = state
 EOF
